@@ -106,7 +106,7 @@ The MQTT broker acts as middleware, receiving messages from the device simulator
 
 ---
 
-## 📄 License
+## License
 
 This project is released **without an open source license**.
 
