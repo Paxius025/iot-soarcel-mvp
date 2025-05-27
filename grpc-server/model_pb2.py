@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bmodel.proto\x12\x05model\"\x83\x01\n\rSensorRequest\x12\x11\n\tdevice_id\x18\x01 \x01(\t\x12\x13\n\x0birradiation\x18\x02 \x01(\x01\x12\x1a\n\x12module_temperature\x18\x03 \x01(\x01\x12\x1b\n\x13\x61mbient_temperature\x18\x04 \x01(\x01\x12\x11\n\ttimestamp\x18\x05 \x01(\x03\"X\n\x08\x41IScores\x12\x13\n\x0bIRRADIATION\x18\x01 \x01(\x01\x12\x1a\n\x12MODULE_TEMPERATURE\x18\x02 \x01(\x01\x12\x1b\n\x13\x41MBIENT_TEMPERATURE\x18\x03 \x01(\x01\"<\n\nAIResponse\x12\x0e\n\x06status\x18\x01 \x01(\t\x12\x1e\n\x05score\x18\x02 \x01(\x0b\x32\x0f.model.AIScores2B\n\x0cModelService\x12\x32\n\x07Predict\x12\x14.model.SensorRequest\x1a\x11.model.AIResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bmodel.proto\x12\x05model\"\x83\x01\n\rSensorRequest\x12\x11\n\tdevice_id\x18\x01 \x01(\t\x12\x13\n\x0birradiation\x18\x02 \x01(\x01\x12\x1a\n\x12module_temperature\x18\x03 \x01(\x01\x12\x1b\n\x13\x61mbient_temperature\x18\x04 \x01(\x01\x12\x11\n\ttimestamp\x18\x05 \x01(\x03\"X\n\x08\x41IScores\x12\x13\n\x0bIRRADIATION\x18\x01 \x01(\x01\x12\x1a\n\x12MODULE_TEMPERATURE\x18\x02 \x01(\x01\x12\x1b\n\x13\x41MBIENT_TEMPERATURE\x18\x03 \x01(\x01\"Q\n\nAIResponse\x12\x0e\n\x06status\x18\x01 \x01(\t\x12\x1e\n\x05score\x18\x02 \x01(\x0b\x32\x0f.model.AIScores\x12\x13\n\x0b\x66inal_score\x18\x03 \x01(\x02\x32\x42\n\x0cModelService\x12\x32\n\x07Predict\x12\x14.model.SensorRequest\x1a\x11.model.AIResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -36,7 +36,7 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_AISCORES']._serialized_start=156
   _globals['_AISCORES']._serialized_end=244
   _globals['_AIRESPONSE']._serialized_start=246
-  _globals['_AIRESPONSE']._serialized_end=306
-  _globals['_MODELSERVICE']._serialized_start=308
-  _globals['_MODELSERVICE']._serialized_end=374
+  _globals['_AIRESPONSE']._serialized_end=327
+  _globals['_MODELSERVICE']._serialized_start=329
+  _globals['_MODELSERVICE']._serialized_end=395
 # @@protoc_insertion_point(module_scope)

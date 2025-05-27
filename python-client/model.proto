@@ -19,6 +19,7 @@ message AIScores {
 message AIResponse {
   string status = 1;
   AIScores score = 2;
+  float final_score = 3;
 }
 
 service ModelService {

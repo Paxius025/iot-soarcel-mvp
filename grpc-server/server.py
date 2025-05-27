@@ -8,7 +8,7 @@ import model_pb2
 import model_pb2_grpc
 from grpc_reflection.v1alpha import reflection
 from gru_model import GRUModel  # <-- Import GRUModel
-
+from et_model import ETModel
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -20,6 +20,7 @@ logger = logging.getLogger(__name__)
 class ModelServiceServicer(model_pb2_grpc.ModelServiceServicer):
     def __init__(self):
         self.gru = GRUModel()
+        self.et_model = ETModel()
 
     def Predict(self, request, context):
         logger.info(
@@ -30,33 +31,47 @@ class ModelServiceServicer(model_pb2_grpc.ModelServiceServicer):
             f"  TIMESTAMP: {request.timestamp}"
         )
         
-        # 1. Create DataFrame from request
+        # 1. Step 1: Receive input
         input_df = pd.DataFrame([{
             'IRRADIATION': request.irradiation,
             'MODULE_TEMPERATURE': request.module_temperature,
             'AMBIENT_TEMPERATURE': request.ambient_temperature
         }])
 
-        # 2. Call GRUModel
         try:
-            prediction = self.gru.forecasting(input_df)
-            logger.info(f"Prediction result: {prediction}")
+            # 2. Step 2: Forecast ahead with GRU
+            forecast_array = self.gru.forecasting(input_df)  # -> np.ndarray (3,)
+            
+            # 3. Step 3: Create new DataFrame for ETModel
+            forecast_df = pd.DataFrame([{
+            'IRRADIATION': forecast_array[0],
+            'MODULE_TEMPERATURE': forecast_array[1],
+            'AMBIENT_TEMPERATURE': forecast_array[2]
+            }])
+
+            # 4. Step 4: Use ETModel for final prediction
+            prediction = self.et_model.predict(forecast_df)  # → Expected to get array or scalar
+
+            logger.info(f"Final prediction (ETModel): {prediction}")
+
         except Exception as e:
             logger.error(f"Error during prediction: {e}")
+            
             context.set_details(str(e))
             context.set_code(grpc.StatusCode.INTERNAL)
             return model_pb2.AIResponse(status="error", score=0.0)
 
-        # 3. Send back AIResponse
-        score_msg = model_pb2.AIScores(
-            IRRADIATION=float(prediction[0]),
-            MODULE_TEMPERATURE=float(prediction[1]),
-            AMBIENT_TEMPERATURE=float(prediction[2])
-        )
-        
+        # 5. Step 5: Return the result via gRPC
+        final_score = float(prediction[0])
+
         response = model_pb2.AIResponse(
             status="ok",
-            score=score_msg
+            score=model_pb2.AIScores(  
+                IRRADIATION=float(forecast_array[0]),
+                MODULE_TEMPERATURE=float(forecast_array[1]),
+                AMBIENT_TEMPERATURE=float(forecast_array[2])
+            ),
+            final_score=final_score 
         )
 
         logger.info(f"Sending response: {response}")
