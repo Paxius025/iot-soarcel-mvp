@@ -10,7 +10,7 @@ class ETModel:
         
         model_path = os.path.join(base_dir, 'model', 'et_model.pkl')
         
-        print(f"Loading model from: {model_path}")
+        # print(f"Loading model from: {model_path}")
         self.model = joblib.load(model_path)
 
     def predict(self, input_df: pd.DataFrame):
