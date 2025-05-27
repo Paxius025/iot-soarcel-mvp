@@ -1,0 +1,46 @@
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2.0
+    container_name: mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+  python-client:
+    build:
+      context: ./python-client
+      dockerfile: Dockerfile
+    depends_on:
+      - mosquitto
+      - grpc-server
+    volumes:
+      - ./python-client:/app
+    environment:
+      - MQTT_BROKER=mosquitto
+    command: ["python", "main.py"]
+
+  grpc-server:
+    build:
+      context: ./grpc-server
+      dockerfile: Dockerfile
+    ports:
+      - "50051:50051"
+    depends_on:
+      - mosquitto
+    volumes:
+      - ./grpc-server:/app
+    command: ["python", "server.py"]
+
+  device-simulator:
+    build:
+      context: ./device-simulator
+      dockerfile: Dockerfile
+    depends_on:
+      - mosquitto
+    volumes:
+      - ./device-simulator:/app
+    environment:
+      - MQTT_BROKER=mosquitto
+      - MQTT_PORT=1883
+    command: ["python", "simulator.py"]

@@ -1,0 +1,15 @@
+# Python junk
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Python venv
+venv*/
+venv311/
+
+# Mac/IDE junk
+.DS_Store
+.vscode/
+.idea/

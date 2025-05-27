@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package model;
+
+message SensorRequest {
+  string device_id = 1;
+  double irradiation = 2;
+  double module_temperature = 3;
+  double ambient_temperature = 4;
+  int64 timestamp = 5; 
+} 
+
+message AIScores {
+  double IRRADIATION = 1;
+  double MODULE_TEMPERATURE = 2;
+  double AMBIENT_TEMPERATURE = 3;
+}
+
+message AIResponse {
+  string status = 1;
+  AIScores score = 2;
+}
+
+service ModelService {
+  rpc Predict(SensorRequest) returns (AIResponse);
+}
